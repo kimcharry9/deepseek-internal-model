@@ -1,0 +1,34 @@
+/data/deepseek-model/DeepSeek-R1-Distill-Llama-8B-unsloth-bnb-4bit/train-program/transform_csv_to_faissdb.py:4: LangChainDeprecationWarning: Importing FAISS from langchain.vectorstores is deprecated. Please replace deprecated imports:
+
+>> from langchain.vectorstores import FAISS
+
+with new imports of:
+
+>> from langchain_community.vectorstores import FAISS
+You can use the langchain cli to **automatically** upgrade many imports. Please see documentation here <https://python.langchain.com/docs/versions/v0_2/>
+  from langchain.vectorstores import FAISS
+/data/deepseek-model/DeepSeek-R1-Distill-Llama-8B-unsloth-bnb-4bit/train-program/transform_csv_to_faissdb.py:5: LangChainDeprecationWarning: Importing HuggingFaceEmbeddings from langchain.embeddings is deprecated. Please replace deprecated imports:
+
+>> from langchain.embeddings import HuggingFaceEmbeddings
+
+with new imports of:
+
+>> from langchain_community.embeddings import HuggingFaceEmbeddings
+You can use the langchain cli to **automatically** upgrade many imports. Please see documentation here <https://python.langchain.com/docs/versions/v0_2/>
+  from langchain.embeddings import HuggingFaceEmbeddings
+/data/deepseek-model/DeepSeek-R1-Distill-Llama-8B-unsloth-bnb-4bit/train-program/transform_csv_to_faissdb.py:52: LangChainDeprecationWarning: The class `HuggingFaceEmbeddings` was deprecated in LangChain 0.2.2 and will be removed in 1.0. An updated version of the class exists in the :class:`~langchain-huggingface package and should be used instead. To use it run `pip install -U :class:`~langchain-huggingface` and import as `from :class:`~langchain_huggingface import HuggingFaceEmbeddings``.
+  embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+         name                       time  ... disk_total.bytes disk_used.bytes
+0        disk  2025-02-18T03:00:00+07:00  ...     107317563392      5680300032
+1        disk  2025-02-18T03:00:00+07:00  ...      10726932480      1352622080
+2        disk  2025-02-18T03:00:00+07:00  ...      16095641600      3657510912
+3        disk  2025-02-18T03:00:00+07:00  ...       5358223360       602447872
+4        disk  2025-02-18T03:00:00+07:00  ...       5358223360        33783808
+...       ...                        ...  ...              ...             ...
+1459472  disk  2025-02-18T19:59:59+07:00  ...        533368832       195641344
+1459473  disk  2025-02-18T19:59:59+07:00  ...       5358223360        33783808
+1459474  disk  2025-02-18T19:59:59+07:00  ...     643948351488    340088152064
+1459475  disk  2025-02-18T19:59:59+07:00  ...      32196526080       385769472
+1459476  disk  2025-02-18T19:59:59+07:00  ...      24144510976        74522624
+
+[1459477 rows x 9 columns]

@@ -1,0 +1,52 @@
+import json
+import pandas as pd
+import glob
+import time
+import torch
+import sys
+import os
+import msal
+import requests
+from tqdm import tqdm
+from datetime import datetime
+from langchain_community.document_loaders.sharepoint import SharePointLoader
+from langchain_community.document_loaders.parsers.msword import MsWordParser
+from langchain_community.document_loaders.parsers.pdf import PDFMinerParser
+from langchain_community.document_loaders.parsers.audio import OpenAIWhisperParser
+from office365.sharepoint.client_context import ClientContext
+from office365.runtime.auth.client_credential import ClientCredential
+from dotenv import load_dotenv
+
+# Load credentials from .env
+load_dotenv(override=True)
+
+# Load document_library_id from .env
+document_library_id = os.getenv("DOCUMENT_LIBRARY_ID")
+tenant_name = os.getenv("SHAREPOINT_TENANT_NAME")
+tenant_id = os.getenv("TENANT_ID")
+site_name = os.getenv("SHAREPOINT_SITE_NAME")
+client_id = os.getenv("O365_CLIENT_ID")
+client_secret = os.getenv("O365_CLIENT_SECRET")
+
+authority = f"https://login.microsoftonline.com/{tenant_id}"
+site_url = f"https://{tenant_name}/sites/{site_name}"
+folder_url = f"/sites/{site_name}/Shared Documents/read_doc_test"
+dest_folder = "/data/open-webui_data/sync_dir"
+os.makedirs(dest_folder, exist_ok=True)
+
+print(authority)
+print(site_url)
+
+ctx = ClientContext("https://placidth.sharepoint.com/sites/Test_document_store_for_RAG").with_credentials(ClientCredential(client_id, client_secret))
+#response = ctx.web.get_file_by_server_relative_url(file_url).download("downloaded_file.xlsx").execute_query()
+
+folder = ctx.web.get_folder_by_server_relative_url(folder_url)
+files = folder.files
+ctx.load(files)
+ctx.execute_query()
+
+for file in files:
+    print("Downloading:", file.properties["Name"])
+    download_path = os.path.join(dest_folder, file.properties["Name"])
+    file.download(download_path).execute_query()
+    print(f"Downloaded {download_path}")

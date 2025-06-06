@@ -1,0 +1,67 @@
+from datetime import datetime
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms import Ollama
+from langchain.chains.llm import LLMChain
+from langchain.chains import RetrievalQA
+from langchain.schema import StrOutputParser
+from langchain.prompts import PromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+
+model_dir = "/data/deepseek-model/DeepSeek-R1-Distill-Llama-8B-unsloth-bnb-4bit"
+data_dir = "/data/deepseek-model/cleansed_dataset"
+db_dir = "/data/deepseek-model/faiss_db"
+
+######################################################### 
+#   RAG Processing                                      #
+#########################################################
+
+#-- Load Datasets from FAISS DB --#
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+vector_db = FAISS.load_local(db_dir, embeddings, allow_dangerous_deserialization=True)
+
+retriever = vector_db.as_retriever(search_kwargs={"k": 5})
+
+model = Ollama(model="deepseek-r1-8b-param-ver20250321_145325")
+
+# Craft the prompt template
+prompt = """
+1. Use ONLY the context below.
+2. If unsure, say "Sorry for unconvenience, I cannot answer this topic right now.".
+3. Keep answers under 4 sentences.
+
+Context: {context}
+
+Question: {question}
+
+Answer:
+"""
+QA_CHAIN_PROMPT = PromptTemplate.from_template(prompt)
+
+# Chain 1: Generate answers
+llm_chain = LLMChain(llm=model, prompt=QA_CHAIN_PROMPT)
+
+# Chain 2: Combine document chunks
+document_prompt = PromptTemplate(
+    template="Context:\ncontent:{page_content}\nsource:{source}",
+    input_variables=["page_content", "source"]
+)
+
+# Final RAG pipeline
+#qa = RetrievalQA(
+#    combine_documents_chain=StuffDocumentsChain(
+#        llm_chain=llm_chain,
+#        document_prompt=document_prompt
+#    ),
+#    retriever=retriever
+#)
+
+rag_chain = (
+    {"context": retriever | document_prompt, "question": RunnablePassthrough()}
+    | QA_CHAIN_PROMPT
+    | llm_chain
+    | StrOutputParser()
+)
+
+result = rag_chain.invoke("What is the percent disk_usage of disk path '/var' at 2025-02-12T03:00:00+07:00 from host 'gsb-lake-prd-app12'")
+print(result)
