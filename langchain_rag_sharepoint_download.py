@@ -12,7 +12,7 @@ from fpdf import FPDF
 load_dotenv(override=True)
 
 # SharePoint setup
-document_library_id = "b!TZcDuBcmZUSrOa2XqBEz6PCqIIHxey1OjVKybcDrpVOY1-rp-Y4wQJsti4qHapTs"
+document_library_id = os.getenv("DOCUMENT_LIBRARY_ID")
 handlers = {
     "application/msword": MsWordParser(),
     "application/pdf": PDFMinerParser(),
@@ -48,4 +48,4 @@ for doc in documents:
     #subprocess.run(["pandoc", local_path, "-o", pdf_path, "--pdf-engine=xelatex", "-V", "mainfont=/usr/share/fonts/custom-thai/THSarabunNew.ttf"], check=True)
     #os.remove(local_path)
     
-    print(f"✅ Downloaded: {filename}")
+    print(f"Downloaded: {filename}")

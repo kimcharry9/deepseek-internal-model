@@ -1,8 +1,8 @@
 #########################################################################################
 #                                                                                       #
-#                    *** Machine Learning - Prediction Model ***                        #
-#             	    DeepSeek LLM Training via Unsloth & Ollama POC               	#
-#                    Implemented by Placid SE-AI Development Team                       #
+#                     *** Generative AI Implementation POC ***                          #
+#             	    DeepSeek LLM Training via Unsloth & Ollama POC               	    #
+#              Implemented by Wongsatorn Poopayak (github: @kimcharry9)                 #
 #                                                                                       #
 #########################################################################################
 

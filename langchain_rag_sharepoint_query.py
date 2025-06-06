@@ -66,8 +66,8 @@ input_variables=["user_query", "formatted_results"],
 print("[4] Pull Prompt Template and Retrieve SQL Query: Success!")
 
 print("[5] Run Streamlit UI with DeepSeek Model Deployment: Processing...")
-st.set_page_config(page_title="💬 LLM Chat with FAISS", layout="wide")
-st.title("💬 Ask your documents (RAG via Ollama)")
+st.set_page_config(page_title="LLM Chat with FAISS", layout="wide")
+st.title("Ask your documents (RAG via Ollama)")
 
 query = st.text_input("Ask a question about your data:")
 
@@ -76,6 +76,6 @@ formatted_prompt = prompt_template.format(user_query=query, formatted_results=re
 if query:
     with st.spinner("Thinking..."):
         response = llm.invoke(formatted_prompt)
-        st.success("✅ Answer:")
+        st.success("Answer:")
         st.write(response)
 print("[5] Run Streamlit UI with DeepSeek Model Deployment: Success!")
